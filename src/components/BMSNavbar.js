@@ -5,10 +5,13 @@ import Form from 'react-bootstrap/Form';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
-import  {Link, useNavigate} from 'react-router-dom';
-
+import  {Link, useNavigate,useLocation} from 'react-router-dom';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Card from 'react-bootstrap/Card';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import BookMyShowSvg from '../images/BMSSvg';
+
 
 function BMSNavbar() {
   let timer;
@@ -16,8 +19,12 @@ function BMSNavbar() {
   const [final, setFinal] = useState([]);
   const [isLogin,setIsLogin] = useState(localStorage.getItem("login"));
   const [loginUser,setLoginUser] = useState("");
-  const navigate = useNavigate();
   
+  const navigate = useNavigate();
+  const history = useNavigate();
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const searchResults = JSON.parse(queryParams.get('searchResults'));
   
   const nowPlayingUri =
   "https://api.themoviedb.org/3/movie/now_playing?api_key=5ad64c4171e1925cb11a12cfdf147bd5&language=en-US&page=1";
@@ -62,7 +69,8 @@ function BMSNavbar() {
           )
           .slice(0, 5);
           console.log(result);
-        setFinal(result);
+         setFinal(result);
+       
       }
     }, 500);
   };

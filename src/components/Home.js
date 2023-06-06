@@ -5,10 +5,12 @@ import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import BMSSidebar from './BMSSidebar';
+import Footer from './Footer';
 import Modal from 'react-bootstrap/Modal';
 import Image from 'react-bootstrap/Image'
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { useLocation } from 'react-router-dom';
 export default function Home() {
   const navigate = new useNavigate();
   const [items, setItems] = useState([]);
@@ -18,6 +20,7 @@ export default function Home() {
   const [show, setShow] = useState(false);
   const isLogin = localStorage.getItem("login");
   const [favouriteMovie ,setFavoriteMovie] = useState([]);
+
   
   const handleClose = () => {
     setShow(false);
@@ -78,7 +81,8 @@ export default function Home() {
           console.log(error);
         }
       );
-
+    
+          
   }, []);
 
 
@@ -86,72 +90,86 @@ export default function Home() {
     
     
   return (
-        <div className='app-container' style={{position :  'absolute'}}>
-        <BMSSidebar func={pull_data}/>
-       <Container className='mt-4'>
+      <div className='app-container' style={{ position: 'absolute' }}>
+      <BMSSidebar func={pull_data} />
+      <Container className='mt-4'>
         <h1>Now Playing </h1>
-        {(genreName!=="") ? <span>{genreName}</span> : " "}
-        
-       <Row style={{ padding : '0.2rem' }} >
+        {/* <Row>
+              {searchResults.map((item) => (
+                <Col xl={2} lg={3} md={4} sm={5} key={item.id} className='mb-1'>
+                  <Card style={{ height: '20rem', overflow: 'hidden' }}>
+                    <Card.Body style={{ padding: '0' }}>
+                      <Card.Img variant='top' src={imgUri + item.poster_path} />
+                      <Card.Title style={{ padding: '2px', fontSize: '17px' }}>{item.title}</Card.Title>
+                      <Card.Text className='d-flex justify-content-between' style={{ padding: '2px' }}>
+                        <span className='uppercase'>{item.original_language}</span>
+                        <span>{item.vote_average}</span>
+                      </Card.Text>
+                    </Card.Body>
+                  </Card>
+                </Col>
+              ))}
+            </Row> */}
 
-       {(genreId === "") ? items.map((item) => (
-          <Col xl={2} lg={3} md={4} sm={5} key={item.id} className="mb-1"  onClick={() => handleShow(item)}>
-          <Card style={{ height: '20rem' , overflow : 'hidden'  }}>
-   <Card.Body style={{ padding: '0' }} >
-     <Card.Img variant="top" src={imgUri + item.poster_path} />
-     <Card.Title style={{ padding: '2px' ,fontSize : '17px'}}>{item.title}</Card.Title>
-     <Card.Text className='d-flex justify-content-between' style={{ padding: '2px'}}>
-        <span className='uppercase'>{item.original_language
-}</span><span>{item.vote_average}</span>
-     </Card.Text>
-   </Card.Body>
- </Card>
-       </Col>
-        )) : items.filter(item => item.genre_ids.includes(genreId)).map(filterItem => (
-          <Col xl={2} lg={3} md={4} sm={5} key={filterItem.id} className="mb-1" onClick={() => handleShow(filterItem)}>
-          <Card style={{ height: '20rem' , overflow : 'hidden'  }}>
-   <Card.Body style={{ padding: '0' }} >
-     <Card.Img variant="top" src={imgUri + filterItem.poster_path} />
-     <Card.Title style={{ padding: '2px' ,fontSize : '17px'}}>{filterItem.title}</Card.Title>
-     <Card.Text className='d-flex justify-content-between' style={{ padding: '2px'}}>
-        <span className='uppercase'>{filterItem.original_language
-}</span><span>{filterItem.vote_average}</span>
-     </Card.Text>
-   </Card.Body>
- </Card>
-       </Col>
-        )) 
-        }
-       </Row>
-     </Container>
-      { (movieModal) ? 
-     <Modal show={show} onHide={handleClose} centered>
-        <Modal.Header closeButton />
-        <Modal.Body className='modalBody'><div><Image src={imgUri + movieModal.poster_path} width={200} height={200} thumbnail /></div><div className='modelData'><ul className='no-bullets'>
-          <li><h4>{movieModal.title}</h4></li>
-          <li><h4><i class="fa-solid fa-star "></i>{movieModal.vote_average}/10</h4></li>
-          <li className='uppercase'>{movieModal.original_language}</li>
-          <li>{movieModal.overview}</li>
-          <li>Rs.<p id="ticketPrice">{getRandomNumber(100,300)}</p></li>
+        {(genreName !== "") ? <span>{genreName}</span> : " "}
+
+        <Row style={{ padding: '0.2rem' }}>
+
+          {(genreId === "") ? items.map((item) => (
+            <Col xl={2} lg={3} md={4} sm={5} key={item.id} className="mb-1" onClick={() => handleShow(item)}>
+              <Card style={{ height: '20rem', overflow: 'hidden' }}>
+                <Card.Body style={{ padding: '0' }}>
+                  <Card.Img variant="top" src={imgUri + item.poster_path} />
+                  <Card.Title style={{ padding: '2px', fontSize: '17px' }}>{item.title}</Card.Title>
+                  <Card.Text className='d-flex justify-content-between' style={{ padding: '2px' }}>
+                    <span className='uppercase'>{item.original_language}</span><span>{item.vote_average}</span>
+                  </Card.Text>
+                </Card.Body>
+              </Card>
+            </Col>
+          )) : items.filter(item => item.genre_ids.includes(genreId)).map(filterItem => (
+            <Col xl={2} lg={3} md={4} sm={5} key={filterItem.id} className="mb-1" onClick={() => handleShow(filterItem)}>
+              <Card style={{ height: '20rem', overflow: 'hidden' }}>
+                <Card.Body style={{ padding: '0' }}>
+                  <Card.Img variant="top" src={imgUri + filterItem.poster_path} />
+                  <Card.Title style={{ padding: '2px', fontSize: '17px' }}>{filterItem.title}</Card.Title>
+                  <Card.Text className='d-flex justify-content-between' style={{ padding: '2px' }}>
+                    <span className='uppercase'>{filterItem.original_language}</span><span>{filterItem.vote_average}</span>
+                  </Card.Text>
+                </Card.Body>
+              </Card>
+            </Col>
+          ))}
+        </Row>
+        <Footer />
+      </Container>
+
+      {(movieModal) ?
+        <Modal show={show} onHide={handleClose} centered>
+          <Modal.Header closeButton />
+          <Modal.Body className='modalBody'><div><Image src={imgUri + movieModal.poster_path} width={200} height={200} thumbnail /></div><div className='modelData'><ul className='no-bullets'>
+            <li><h4>{movieModal.title}</h4></li>
+            <li><h4><i class="fa-solid fa-star "></i>{movieModal.vote_average}/10</h4></li>
+            <li className='uppercase'>{movieModal.original_language}</li>
+            <li>{movieModal.overview}</li>
+            <li>Rs.<p id="ticketPrice">{getRandomNumber(100, 300)}</p></li>
           </ul></div></Modal.Body>
-        <Modal.Footer>
-          <Button variant="primary" onClick={() =>bookTicket(movieModal)} >
-            Book Ticket
-           
-          </Button>
+          <Modal.Footer>
+            <Button variant="primary" onClick={() => bookTicket(movieModal)}>
+              Book Ticket
+
+            </Button>
             {(favouriteMovie.includes(movieModal)) ?
-          <Button variant="primary" onClick={() =>saveToFavorites(movieModal)}>
-            +Wishlist
-          </Button>
-            : <Button variant="primary" onClick={() =>saveToFavorites(movieModal)}>
-            +Wishlist
-          </Button>}  
-        </Modal.Footer>  
-      </Modal> : ""
-}
-  
+              <Button variant="primary" onClick={() => saveToFavorites(movieModal)}>
+                +Wishlist
+              </Button>
+              : <Button variant="primary" onClick={() => saveToFavorites(movieModal)}>
+                +Wishlist
+              </Button>}
+          </Modal.Footer>
+        </Modal> : ""}
+
     </div>
-    
   )
 }
 // {movieModal.overview.slice(0, 40)}...

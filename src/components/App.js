@@ -1,24 +1,27 @@
-import React from 'react'
+import React, {useState} from 'react';
 import '../styles/App.css';
 import  BMSNavbar  from './BMSNavbar';
 import Home from './Home';
 import {BrowserRouter as Router, Routes , Route} from 'react-router-dom';
-
+import Footer from './Footer';
 import Register from './Register';
 import Login from './Login';
 import Favorites from './Favourites';
 import BookTicket from './BookTicket';
 import Payment from './Payment';
 import BookSeat from './BookSeat';
-const App = () => {
 
+const App = () => {
+  
 
   return (
     <div id="main">
       <Router>
       <BMSNavbar/>
+     
         <Routes>
-          <Route exact path ="/" element={<Home/>}/>
+          <Route exact path ="/" element={<Home />}/>
+        
           <Route path ="/register"  element={<Register/>}/>
           <Route path ="/login"  element={<Login/>}/>
           <Route path ="/favorites"  element={<Favorites/>}/>
@@ -26,7 +29,9 @@ const App = () => {
           <Route path ="/payment"  element={<Payment/>}/>
           <Route path ="/bookedseat"  element={<BookSeat/>}/>
         </Routes>
+    
       </Router>
+     
     </div>
   )
 }
